@@ -1,4 +1,4 @@
-from src.models.http_verb import HttpVerb
+from src.model.http_verb import HttpVerb
 
 
 class ResourceArnUtil:

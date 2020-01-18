@@ -1,4 +1,4 @@
-from src.models.effect_verb import Effect
+from src.model.effect_verb import Effect
 
 
 class Statement:
