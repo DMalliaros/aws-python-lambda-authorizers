@@ -1,0 +1,5 @@
+requests==2.22.0
+pyjwt[crypto]==1.7.1
+pycryptodome==3.9.4
+mock==3.0.5
+requests_mock==1.7.0
