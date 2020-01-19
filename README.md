@@ -4,7 +4,7 @@
 ```$xslt
 {
     "type": "TOKEN",
-    "methodArn": "arn:aws:execute-api:eu-west-1:111111111111:qwert12345/dev/GET/v1/jobs",
+    "methodArn": "arn:aws:execute-api:{regionId}:111111111111:{apiId}/{stage}/{httpVerb}/{resource}",
     "authorizationToken": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciO......"
 }
 ```
@@ -16,7 +16,7 @@
    "cognito:groups":[
       "admin"
    ],
-   "iss":"https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_abcde1234",
+   "iss":"https://cognito-idp.{regionId}.amazonaws.com/{userpoolID}",
    "cognito:username":"test@klarna.com",
    "nonce":"n-0S6_WzA2Mj",
    "aud":"qwertuiop123654789",
@@ -32,13 +32,13 @@
 * Confirm the Structure of the JWT 
 * Validate the JWT Signature
     * Get public JSON Web Keys (JWK) 
-        `ex.: https://cognito-idp.<REGION>.amazonaws.com/<userpoolID>/.well-known/jwks.json`
+        `ex.: https://cognito-idp.{regionId}.amazonaws.com/{userpoolID}/.well-known/jwks.json`
     * Find the find based on `kid` in  JWK and on the JWT token
 * Verify the Claims 
     * The audience (aud) claim should match the app client ID created in the Amazon Cognito user pool.  
     * Verify that the token is not expired.
     * The issuer (iss) claim should match your user pool.
-     `ex.: https://cognito-idp.<REGION>.amazonaws.com/<userpoolID>`
+     `ex.: https://cognito-idp.{regionId}.amazonaws.com/{userpoolID}`
 
 
 
@@ -52,7 +52,7 @@
       {
         "Action": "execute-api:Invoke",
         "Effect": "Allow|Deny",
-        "Resource": "arn:aws:execute-api:{regionId}:{accountId}:{apiId}/{stage}/{httpVerb}/[{resource}/[{child-resources}]]"
+        "Resource": "arn:aws:execute-api:{regionId}:{accountId}:{apiId}/{stage}/{httpVerb}/{resource}/{child-resources}"
       }
     ]
   },
