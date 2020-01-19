@@ -21,7 +21,7 @@ class TestStatement(unittest.TestCase):
         self.assertEqual(statement.effect, effect)
         self.assertEqual(statement.resource, self.resource_arn)
 
-    def test_inti__should_throw_exception__when_effect__is_not_enum(self):
+    def test_inti__should_throw_exception__when_effect_is_not_enum(self):
         effect = "ALLOW"
 
         with self.assertRaises(Exception) as context:
