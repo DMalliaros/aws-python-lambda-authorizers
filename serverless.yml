@@ -5,6 +5,10 @@ provider:
   runtime: python3.8
   stage: dev
   region: eu-west-1
+  stackTags:
+    Environment: ${self:provider.stage}
+  tags:
+    Environment: ${self:provider.stage}
 
 plugins:
   - serverless-python-requirements
@@ -19,6 +23,8 @@ custom:
 package:
   exclude:
     - test/**
+    - .serverless/**
+    - node_modules/**
 
 functions:
   authorizerFunc:
