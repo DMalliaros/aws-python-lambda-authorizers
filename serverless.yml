@@ -41,5 +41,6 @@ functions:
       - http:
           path: demo
           method: get
+          cors: true
           authorizer: authorizerFunc
 
