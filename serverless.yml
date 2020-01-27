@@ -29,6 +29,10 @@ package:
 functions:
   authorizerFunc:
     handler: src/authorizer.lambda_handler
+    environment:
+      USER_POOL_ID: ${opt:userPoolId}
+      CLIENT_IDS: ${opt:userPoolClientId}
+      REGION: ${self:provider.region}
     layers:
       - {Ref: PythonRequirementsLambdaLayer}
   hello:
