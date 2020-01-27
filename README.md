@@ -77,17 +77,20 @@ Amazon API Gateway expect the following format. More info you can find on the [l
 }
 ```
 
-### Deploy
+### Demo
 
-For the deployment I use the serverless framework 
+For the deployment of the demo I use the serverless framework.
+
+#### Requiem
+
+* [Serverless framework](https://serverless.com/cli/)
+* Cognito User pool
+* UserPoolClient
+
+#### Deploy Stack
+
+We need to provide the `CLIENT_ID` and the `USER_POOL_ID` from our Cognito User pool
+
 ```shell script
-sls deploy
-```
-
-### Remove All the Stack
-
-with the serverless with the eas way that exist to deploy your stack you can also remove it  
-
-```shell script
-sls remove
+sls deploy --userPoolClientId='CLIENT_ID' --userPoolId='USER_POOL_ID'
 ```
