@@ -78,16 +78,15 @@ class TestAuthorizer(unittest.TestCase):
         token = jwt.encode(build_claims(self.sub, ""), self.private_key, algorithm='RS256', headers={"kid": self.kid})
         event = build_event_set(token.decode("utf-8"))
 
-        response = lambda_handler(event, None)
-        json_data = json.loads(response)
-        self.assertEqual(self.sub, json_data["principalId"])
-        self.assertEqual(0, len(json_data["context"]))
-        self.assertEqual("2012-10-17", json_data["policyDocument"]["Version"])
-        self.assertEqual(1, len(json_data["policyDocument"]["Statement"]))
-        self.assertEqual("Allow", json_data["policyDocument"]["Statement"][0]["Effect"])
-        self.assertEqual("execute-api:Invoke", json_data["policyDocument"]["Statement"][0]["Action"])
+        data = lambda_handler(event, None)
+        self.assertEqual(self.sub, data["principalId"])
+        self.assertEqual(0, len(data["context"]))
+        self.assertEqual("2012-10-17", data["policyDocument"]["Version"])
+        self.assertEqual(1, len(data["policyDocument"]["Statement"]))
+        self.assertEqual("Allow", data["policyDocument"]["Statement"][0]["Effect"])
+        self.assertEqual("execute-api:Invoke", data["policyDocument"]["Statement"][0]["Action"])
         self.assertEqual("arn:aws:execute-api:eu-west-1:111111111111:qwert12345/dev/*/*",
-                         json_data["policyDocument"]["Statement"][0]["Resource"])
+                         data["policyDocument"]["Statement"][0]["Resource"])
 
     @patch("src.authorizer.get_jwks")
     def test_lambda_handler__should_return_unauthorized__when_token_expired(self, mock_get_jwks):

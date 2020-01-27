@@ -32,7 +32,7 @@ def lambda_handler(event, context):
 
     method_arn_util = MethodArnUtil(method_arn_str)
     auth_policy_response = _build_auth_policy(claims, method_arn_util)
-    return auth_policy_response.build_response(is_json=True)
+    return auth_policy_response.build_response()
 
 
 def _assert_issuer_match_user_pool(issuer_url, claims):
