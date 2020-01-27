@@ -1,5 +1,6 @@
 import unittest
 
+from src.model.http_verb import HttpVerb
 from src.util.resource_arn_util import ResourceArnUtil
 
 
@@ -11,7 +12,7 @@ class TestResourceArnUtil(unittest.TestCase):
 
     def test_generate_resource_arn__should_return_correct_arn__when_everything_is_ok_and_path_starts_with_slash(self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "GET"
+        verb = HttpVerb.GET
         resource = "/v1/tmp"
 
         arn = resource_arn.generate_resource_arn(verb, resource)
@@ -21,12 +22,13 @@ class TestResourceArnUtil(unittest.TestCase):
                          self.aws_account_id + ":" +
                          self.rest_api_id + "/" +
                          self.stage + "/" +
-                         verb +
+                         verb.value +
                          resource)
 
-    def test_generate_resource_arn__should_return_correct_arn__when_everything_is_ok_and_path_not_starts_with_slash(self):
+    def test_generate_resource_arn__should_return_correct_arn__when_everything_is_ok_and_path_not_starts_with_slash(
+            self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "GET"
+        verb = HttpVerb.GET
         resource = "v1/tmp"
 
         arn = resource_arn.generate_resource_arn(verb, resource)
@@ -36,12 +38,12 @@ class TestResourceArnUtil(unittest.TestCase):
                          self.aws_account_id + ":" +
                          self.rest_api_id + "/" +
                          self.stage + "/" +
-                         verb + "/" +
+                         verb.value + "/" +
                          resource)
 
     def test_generate_resource_arn__should_return_correct_arn__when_everything_is_ok_and_path_is_root(self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "GET"
+        verb = HttpVerb.GET
         resource = "/"
 
         arn = resource_arn.generate_resource_arn(verb, resource)
@@ -51,11 +53,11 @@ class TestResourceArnUtil(unittest.TestCase):
                          self.aws_account_id + ":" +
                          self.rest_api_id + "/" +
                          self.stage + "/" +
-                         verb + "/")
+                         verb.value + "/")
 
     def test_generate_resource_arn__should_throw_error__when_path_is_empty(self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "GET"
+        verb = HttpVerb.GET
         resource = ""
 
         with self.assertRaises(Exception) as context:
@@ -66,7 +68,7 @@ class TestResourceArnUtil(unittest.TestCase):
 
     def test_generate_resource_arn__should_throw_error__when_path_is_none(self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "GET"
+        verb = HttpVerb.GET
         resource = None
 
         with self.assertRaises(Exception) as context:
@@ -77,7 +79,7 @@ class TestResourceArnUtil(unittest.TestCase):
 
     def test_generate_resource_arn__should_throw_name_error__when_http_verb_not_much(self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "GET00"
+        verb = "GET"
         resource = "v1/tmp"
 
         with self.assertRaises(NameError) as context:
@@ -87,24 +89,9 @@ class TestResourceArnUtil(unittest.TestCase):
         self.assertEqual(context.exception.args[0],
                          'Invalid HTTP verb {}. Allowed verbs in HttpVerb class'.format(verb))
 
-    def test_generate_resource_arn__should_return_correct_arn__when_everything_is_ok_and_verb_is_lower_case(self):
-        resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "get"
-        resource = "/v1/tmp"
-
-        arn = resource_arn.generate_resource_arn(verb, resource)
-
-        self.assertEqual(arn, "arn:aws:execute-api:" +
-                         self.region + ":" +
-                         self.aws_account_id + ":" +
-                         self.rest_api_id + "/" +
-                         self.stage + "/" +
-                         "GET" +
-                         resource)
-
     def test_generate_resource_arn__should_return_correct_arn__when_everything_is_ok_and_verb_is_all(self):
         resource_arn = ResourceArnUtil(self.region, self.aws_account_id, self.rest_api_id, self.stage)
-        verb = "ALL"
+        verb = HttpVerb.ALL
         resource = "/v1/tmp"
 
         arn = resource_arn.generate_resource_arn(verb, resource)

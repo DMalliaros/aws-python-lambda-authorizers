@@ -1,0 +1,25 @@
+{
+  "name": "com.dmalliaros.aws.lambda_authorizer",
+  "version": "1.0.0",
+  "description": "Amazon API Gateway Lambda Authorizer & Cognito User Pool",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DMalliaros/AWS-Python-Lambda-Authorizers.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DMalliaros/AWS-Python-Lambda-Authorizers/issues"
+  },
+  "homepage": "https://github.com/DMalliaros/AWS-Python-Lambda-Authorizers#readme",
+  "dependencies": {
+    "serverless-python-requirements": "^5.0.1"
+  }
+}

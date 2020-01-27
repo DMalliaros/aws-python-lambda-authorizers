@@ -1,0 +1,46 @@
+service: aws-python-lambda-authorizers
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: eu-west-1
+  stackTags:
+    Environment: ${self:provider.stage}
+  tags:
+    Environment: ${self:provider.stage}
+
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: false
+    layer: true
+    noDeploy:
+      - mock
+      - requests_mock
+
+package:
+  exclude:
+    - test/**
+    - .serverless/**
+    - node_modules/**
+
+functions:
+  authorizerFunc:
+    handler: src/authorizer.lambda_handler
+    environment:
+      USER_POOL_ID: ${opt:userPoolId}
+      CLIENT_IDS: ${opt:userPoolClientId}
+      REGION: ${self:provider.region}
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+  hello:
+    handler: demo/handler.hello
+    events:
+      - http:
+          path: demo
+          method: get
+          cors: true
+          authorizer: authorizerFunc
+

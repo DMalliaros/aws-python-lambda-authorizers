@@ -1,4 +1,6 @@
-class HttpVerb:
+from enum import Enum
+
+class HttpVerb(Enum):
     GET = "GET"
     POST = "POST"
     PUT = "PUT"

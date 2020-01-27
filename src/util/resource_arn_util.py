@@ -18,9 +18,9 @@ class ResourceArnUtil:
         if resource_path is None or not resource_path:
             raise Exception("No path provided")
         resource = resource_path[1:] if resource_path.startswith('/') else resource_path
-        verb = http_method.upper()
-        if not hasattr(HttpVerb, verb):
-            raise NameError("Invalid HTTP verb " + verb + ". Allowed verbs in HttpVerb class")
+
+        if not isinstance(http_method, HttpVerb):
+            raise NameError("Invalid HTTP verb " + http_method + ". Allowed verbs in HttpVerb class")
 
         return self._execute_arn_format.format(
-            self.region, self.aws_account_id, self.rest_api_id, self.stage, getattr(HttpVerb, verb), resource)
+            self.region, self.aws_account_id, self.rest_api_id, self.stage, http_method.value, resource)
