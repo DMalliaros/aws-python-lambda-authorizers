@@ -25,6 +25,7 @@ package:
     - test/**
     - .serverless/**
     - node_modules/**
+    - demo_frontend/**
 
 functions:
   authorizerFunc:
