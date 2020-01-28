@@ -13,7 +13,7 @@ The event that the lambda authorizer expect have the following format. More info
 ```
 **Cognito Bearer Token**
 
-The Cognito the token that creates have the following format
+The Cognito the token that creates have the following format. More info you can find on the [link](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html#amazon-cognito-user-pools-using-the-access-token)
 
 ```json
 {
@@ -25,11 +25,11 @@ The Cognito the token that creates have the following format
    "iss":"https://cognito-idp.{regionId}.amazonaws.com/{userpoolID}",
    "cognito:username":"test@klarna.com",
    "nonce":"n-0S6_WzA2Mj",
-   "aud":"qwertuiop123654789",
+   "aud":"{clientID}",
    "token_use":"id",
-   "auth_time":1579449466.12106,
-   "exp":1579456666.121044,
-   "iat":1579449466.12106,
+   "auth_time":1500009400,
+   "exp":1500013000,
+   "iat":1500009400,
    "email":"test@test.com"
 }
 ```
@@ -89,8 +89,8 @@ For the deployment of the demo I use the serverless framework.
 
 #### Deploy Stack
 
-We need to provide the `CLIENT_ID` and the `USER_POOL_ID` from our Cognito User pool
+We need to provide the `{clientID}` and the `{userpoolID}` from our Cognito User pool
 
 ```shell script
-sls deploy --userPoolClientId='CLIENT_ID' --userPoolId='USER_POOL_ID'
+sls deploy --userPoolClientId='{clientID}' --userPoolId='{userpoolID}'
 ```
