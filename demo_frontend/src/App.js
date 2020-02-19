@@ -4,11 +4,14 @@ import './App.css';
 import Amplify, { Auth } from 'aws-amplify';
 import { withAuthenticator } from "aws-amplify-react";
 
-const regionId = "{regionId}"
-const userPoolId = "{userPoolId}"
-const clientId = "{clientId}"
-const cognitoDomain = "{cognitoDomain}.auth." + regionId + ".amazoncognito.com"
-const apiGateway = "https://{apiId}.execute-api." + regionId + ".amazonaws.com/{stage}"
+const apiId = "asd132asd1"
+const stage = "dev"
+const regionId = "eu-west-1"
+const clientId = "asd123asd132asd132asd321as"
+const userPoolId = "eu-west-1_123123"
+const cognitoDomainPref = "demo"
+const cognitoDomain = cognitoDomainPref + ".auth." + regionId + ".amazoncognito.com"
+const apiGateway = "https://"+apiId+".execute-api." + regionId + ".amazonaws.com/" + stage
 
 Amplify.configure({
 	Auth: {
