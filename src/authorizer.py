@@ -67,4 +67,7 @@ def _build_auth_policy(claims, method_arn_util):
 
     policy_document.add_statement(statement)
 
+    auth_policy_response.add_context("cognito:username", claims["cognito:username"])
+    auth_policy_response.add_context("exp", claims["exp"])
+
     return auth_policy_response
