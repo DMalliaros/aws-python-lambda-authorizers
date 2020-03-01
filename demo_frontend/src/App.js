@@ -30,10 +30,23 @@ Amplify.configure({
 });
 
 class App extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+            contacts: "",
+            usernameClaims: "",
+            usernameClaimsAuthorizer: ""
+       };
+    }
 	componentDidMount() {
+
 		Auth.currentSession()
 			.then((res) => {
+			    console.log("currentSession", res)
 				const jwtToken = res.getIdToken().getJwtToken();
+				this.setState({
+				    usernameClaims: res.getIdToken()['payload']['cognito:username']
+				});
 				fetch(apiGateway + '/demo', {
 						headers: {
 							'Authorization': 'Bearer ' + jwtToken
@@ -41,9 +54,10 @@ class App extends Component {
 					})
 					.then(res => res.json())
 					.then((data) => {
-						console.log(data)
+						console.log("demo.data",data)
 						this.setState({
-							contacts: (data)
+							contacts: (data.message),
+							usernameClaimsAuthorizer: (data.input.requestContext.authorizer['cognito:username'])
 						})
 					})
 					.catch(console.log)
@@ -58,12 +72,18 @@ class App extends Component {
                         <p >
                             Edit < code > src / App.js < /code> and save to reload.
                         </p>
-                         <a className = "App-link"
-                            href = "https://reactjs.org"
-                            target = "_blank"
-                            rel = "noopener noreferrer" >
-                            Learn React
-                        </a>
+                         <div>
+                            {cognitoDomain}
+                         </div>
+                         <div>
+                            {apiGateway}
+                         </div>
+                         <div>
+                             {this.state.contacts}
+                         </div>
+                         <div>
+                              {this.state.usernameClaims} = {this.state.usernameClaimsAuthorizer}
+                         </div>
                     </header>
 			</div>
 		);
