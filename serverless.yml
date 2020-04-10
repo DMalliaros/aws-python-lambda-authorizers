@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: python3.8
   stage: dev
+  memorySize: 256
   region: eu-west-1
   stackTags:
     Environment: ${self:provider.stage}
