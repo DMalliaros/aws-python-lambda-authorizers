@@ -14,7 +14,7 @@ class TestJWKs(unittest.TestCase):
                 "keys": [
                     {
                         "alg": "RS256",
-                        "e": "RSA Exponent (e)",
+                        "e": "AQAB",
                         "kid": self.kid,
                         "kty": "RSA",
                         "n": "RSA Modulus (n)",
@@ -29,6 +29,7 @@ class TestJWKs(unittest.TestCase):
             self.assertEqual(len(response), 1)
             self.assertTrue(response[self.kid] is not None)
             self.assertEqual(response[self.kid]["alg"], "RS256")
+            self.assertEqual(response[self.kid]["e"], "AQAB")
             self.assertEqual(response[self.kid]["kty"], "RSA", )
             self.assertEqual(response[self.kid]["use"], "sig")
             self.assertEqual(response[self.kid]["kid"], self.kid)

@@ -75,12 +75,15 @@ class TestAuthorizer(unittest.TestCase):
     @patch("src.authorizer.get_jwks")
     def test_lambda_handler__should_return_policy_with_accept__when_everything_is_ok(self, mock_get_jwks):
         mock_get_jwks.return_value = build_response_jwks_set(self.kid, self.modulus, self.exponent)
-        token = jwt.encode(build_claims(self.sub, ""), self.private_key, algorithm='RS256', headers={"kid": self.kid})
+        build_claims_content = build_claims(self.sub, "")
+        token = jwt.encode(build_claims_content, self.private_key, algorithm='RS256', headers={"kid": self.kid})
         event = build_event_set(token.decode("utf-8"))
 
         data = lambda_handler(event, None)
         self.assertEqual(self.sub, data["principalId"])
-        self.assertEqual(0, len(data["context"]))
+        self.assertEqual(2, len(data["context"]))
+        self.assertEqual(build_claims_content["cognito:username"], data["context"]["cognito:username"])
+        self.assertEqual(build_claims_content["exp"], data["context"]["exp"])
         self.assertEqual("2012-10-17", data["policyDocument"]["Version"])
         self.assertEqual(1, len(data["policyDocument"]["Statement"]))
         self.assertEqual("Allow", data["policyDocument"]["Statement"][0]["Effect"])
