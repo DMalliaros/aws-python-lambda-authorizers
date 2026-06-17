@@ -4,7 +4,9 @@ from constructs import Construct
 from aws_cdk import (
     Stack,
     Aws,
+    BundlingOptions,
     CfnOutput,
+    DockerImage,
     Duration,
     aws_apigateway as apigateway,
     aws_lambda as _lambda,
@@ -30,12 +32,25 @@ class AwsPythonLambdaAuthorizersStack(Stack):
             self,
             "AuthorizerFunction",
             runtime=_lambda.Runtime.PYTHON_3_14,
-            handler="authorizer.lambda_handler",
+            handler="src.authorizer.lambda_handler",
             code=_lambda.Code.from_asset(
-                str(project_root / "src"),
+                str(project_root),
+                bundling=BundlingOptions(
+                    image=DockerImage.from_registry("public.ecr.aws/sam/build-python3.14"),
+                    command=[
+                        "bash",
+                        "-lc",
+                        "pip install -r /asset-input/requirements.txt -t /asset-output && cp -R /asset-input/src /asset-output/src",
+                    ],
+                ),
                 exclude=[
                     "**/__pycache__/**",
                     "**/*.pyc",
+                    "cdk/**",
+                    "demo/**",
+                    "demo_frontend/**",
+                    "node_modules/**",
+                    ".venv/**",
                 ],
             ),
             memory_size=256,
