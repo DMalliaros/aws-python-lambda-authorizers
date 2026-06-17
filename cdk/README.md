@@ -19,7 +19,18 @@ This CDK app deploys the existing `authorizerFunc` and `hello` Lambda functions 
    cdk bootstrap
    ```
 
-## Deploy
+## Deploy 
+
+### Cognito stack
+
+To avoid creating and destroying every time the Cognito stack (since it has to do only with the users), we deploy it in a separate stack. Say, if we want to destroy it, we destroy only one of them, or we can destroy both of them. 
+
+```
+cd cdk
+cdk deploy -c stackType=cognito
+```
+
+### Authorizer stack
 
 Provide the Cognito values as CDK context:
 
@@ -32,7 +43,15 @@ Alternatively, use environment variables:
 ```bash
 export USER_POOL_ID=eu-west-1_XXXXXXXX
 export USER_POOL_CLIENT_ID=CLIENT_ID_1,CLIENT_ID_2
-cdk deploy
+cdk deploy -c stackType=authorizer
+```
+
+### Deploy both
+
+I can deploy both stacks using the following command: 
+
+```
+cdk deploy -c stackType=both
 ```
 
 ## Notes
