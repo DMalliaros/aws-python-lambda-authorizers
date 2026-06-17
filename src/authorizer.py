@@ -20,7 +20,7 @@ def lambda_handler(event, context):
     token = event['authorizationToken'].split(' ')[1]
     method_arn_str = event['methodArn']
 
-    claims = jwt.decode(token, verify=False)
+    claims = jwt.decode(token, options={"verify_signature": False}, algorithms=["RS256"])
 
     try:
         _assert_issuer_match_user_pool(environment_parameters.issuer_url, claims)

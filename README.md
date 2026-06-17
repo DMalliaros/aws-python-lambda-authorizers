@@ -23,7 +23,7 @@ The Cognito the token that creates have the following format. More info you can 
       "admin"
    ],
    "iss":"https://cognito-idp.{regionId}.amazonaws.com/{userpoolID}",
-   "cognito:username":"test@klarna.com",
+   "cognito:username":"test@gmail.com",
    "nonce":"n-0S6_WzA2Mj",
    "aud":"{clientID}",
    "token_use":"id",
@@ -79,18 +79,16 @@ Amazon API Gateway expect the following format. More info you can find on the [l
 
 ### Demo
 
-For the deployment of the demo I use the serverless framework.
+For the deployment of the demo I use the AWS CDK.
 
 #### Requiem
 
-* [Serverless framework](https://serverless.com/cli/)
-* Cognito User pool
-* UserPoolClient
+* [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
+* Cognito User pool you can get it form the cdk Cognito stack
+* UserPoolClient you can get it form the cdk Cognito stack
 
 #### Deploy Stack
 
 We need to provide the `{clientID}` and the `{userpoolID}` from our Cognito User pool
 
-```shell script
-sls deploy --userPoolClientId='{clientID}' --userPoolId='{userpoolID}'
-```
+Use the `./cdk/README.md` file that you'll find on the cdk folder. 

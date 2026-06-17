@@ -1,30 +1,31 @@
 import React, {	Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Amplify, { Auth } from 'aws-amplify';
-import { withAuthenticator } from "aws-amplify-react";
+import { Amplify } from 'aws-amplify';
+import { Auth } from '@aws-amplify/auth';
+import { withAuthenticator } from 'aws-amplify-react';
 
-const apiId = "asd132asd1"
-const stage = "dev"
-const regionId = "eu-west-1"
-const clientId = "asd123asd132asd132asd321as"
-const userPoolId = "eu-west-1_123123"
-const cognitoDomainPref = "demo"
-const cognitoDomain = cognitoDomainPref + ".auth." + regionId + ".amazoncognito.com"
-const apiGateway = "https://"+apiId+".execute-api." + regionId + ".amazonaws.com/" + stage
+const apiId = process.env.REACT_APP_API_ID;
+const stage = process.env.REACT_APP_API_STAGE;
+const regionId = process.env.REACT_APP_REGION;
+const clientId = process.env.REACT_APP_COGNITO_USER_POOL_CLIENT_ID;
+const userPoolId = process.env.REACT_APP_COGNITO_USER_POOL_ID;
+const cognitoDomainPref = process.env.REACT_APP_COGNITO_DOMAIN_PREFIX;
+const cognitoDomain = `${cognitoDomainPref}.auth.${regionId}.amazoncognito.com`;
+const apiGateway = `https://${apiId}.execute-api.${regionId}.amazonaws.com`;
 
 Amplify.configure({
 	Auth: {
-		"region": regionId,
-		"userPoolId": userPoolId,
-		"userPoolWebClientId": clientId,
-		"mandatorySignIn": true,
-		"oauth": {
-			"domain": cognitoDomain,
-			"scope": ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
-			"redirectSignIn": "http://localhost:3000/",
-			"redirectSignOut": "http://localhost:3000/",
-			"responseType": "token"
+		region: regionId,
+		userPoolId: userPoolId,
+		userPoolWebClientId: clientId,
+		mandatorySignIn: true,
+		oauth: {
+			domain: cognitoDomain,
+			scope: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
+			redirectSignIn: process.env.REACT_APP_REDIRECT_SIGN_IN,
+			redirectSignOut: process.env.REACT_APP_REDIRECT_SIGN_OUT,
+			responseType: process.env.REACT_APP_OAUTH_RESPONSE_TYPE || "token"
 		}
 	}
 });

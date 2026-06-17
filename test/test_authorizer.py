@@ -7,7 +7,7 @@ from unittest.mock import patch
 from Crypto.PublicKey import RSA
 from datetime import datetime, timedelta
 
-from jwt.utils import force_unicode, to_base64url_uint
+from jwt.utils import to_base64url_uint
 
 from src.authorizer import lambda_handler
 
@@ -65,8 +65,8 @@ class TestAuthorizer(unittest.TestCase):
         key_2 = RSA.generate(2048)
         self.private_key = key.exportKey().decode("utf-8")
         self.private_key_2 = key_2.exportKey().decode("utf-8")
-        self.exponent = force_unicode(to_base64url_uint(key.e))
-        self.modulus = force_unicode(to_base64url_uint(key.n))
+        self.exponent = to_base64url_uint(key.e).decode('utf-8')
+        self.modulus = to_base64url_uint(key.n).decode('utf-8')
         self.sub = str(uuid.uuid1())
         os.environ["USER_POOL_ID"] = "eu-west-1_abcde1234"
         os.environ["CLIENT_IDS"] = "qwertuiop123654789"
@@ -77,7 +77,7 @@ class TestAuthorizer(unittest.TestCase):
         mock_get_jwks.return_value = build_response_jwks_set(self.kid, self.modulus, self.exponent)
         build_claims_content = build_claims(self.sub, "")
         token = jwt.encode(build_claims_content, self.private_key, algorithm='RS256', headers={"kid": self.kid})
-        event = build_event_set(token.decode("utf-8"))
+        event = build_event_set(token)
 
         data = lambda_handler(event, None)
         self.assertEqual(self.sub, data["principalId"])
@@ -96,7 +96,7 @@ class TestAuthorizer(unittest.TestCase):
         mock_get_jwks.return_value = build_response_jwks_set(self.kid, self.modulus, self.exponent)
         token = jwt.encode(build_claims(self.sub, "token_expired"), self.private_key, algorithm='RS256',
                            headers={"kid": self.kid})
-        event = build_event_set(token.decode("utf-8"))
+        event = build_event_set(token)
 
         with self.assertRaises(Exception) as context:
             lambda_handler(event, None)
@@ -109,7 +109,7 @@ class TestAuthorizer(unittest.TestCase):
         mock_get_jwks.return_value = build_response_jwks_set(self.kid, self.modulus, self.exponent)
         token = jwt.encode(build_claims(self.sub, "different_audience"), self.private_key, algorithm='RS256',
                            headers={"kid": self.kid})
-        event = build_event_set(token.decode("utf-8"))
+        event = build_event_set(token)
 
         with self.assertRaises(Exception) as context:
             lambda_handler(event, None)
@@ -122,7 +122,7 @@ class TestAuthorizer(unittest.TestCase):
         mock_get_jwks.return_value = build_response_jwks_set(self.kid, self.modulus, self.exponent)
         token = jwt.encode(build_claims(self.sub, "different_issuer"), self.private_key, algorithm='RS256',
                            headers={"kid": self.kid})
-        event = build_event_set(token.decode("utf-8"))
+        event = build_event_set(token)
 
         with self.assertRaises(Exception) as context:
             lambda_handler(event, None)
@@ -135,7 +135,7 @@ class TestAuthorizer(unittest.TestCase):
         mock_get_jwks.return_value = build_response_jwks_set(self.kid, self.modulus, self.exponent)
         token = jwt.encode(build_claims(self.sub, ""), self.private_key_2, algorithm='RS256',
                            headers={"kid": self.kid})
-        event = build_event_set(token.decode("utf-8"))
+        event = build_event_set(token)
 
         with self.assertRaises(Exception) as context:
             lambda_handler(event, None)
