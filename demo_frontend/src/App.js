@@ -2,8 +2,9 @@ import React, {	Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Amplify } from 'aws-amplify';
-import { Auth } from '@aws-amplify/auth';
-import { withAuthenticator } from 'aws-amplify-react';
+import { fetchAuthSession } from 'aws-amplify/auth';
+import { Authenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 
 const apiId = process.env.REACT_APP_API_ID;
 const stage = process.env.REACT_APP_API_STAGE;
@@ -12,25 +13,28 @@ const clientId = process.env.REACT_APP_COGNITO_USER_POOL_CLIENT_ID;
 const userPoolId = process.env.REACT_APP_COGNITO_USER_POOL_ID;
 const cognitoDomainPref = process.env.REACT_APP_COGNITO_DOMAIN_PREFIX;
 const cognitoDomain = `${cognitoDomainPref}.auth.${regionId}.amazoncognito.com`;
-const apiGateway = `https://${apiId}.execute-api.${regionId}.amazonaws.com`;
+const apiGateway = `https://${apiId}.execute-api.${regionId}.amazonaws.com/${stage}`;
 
 Amplify.configure({
-	Auth: {
-		region: regionId,
-		userPoolId: userPoolId,
-		userPoolWebClientId: clientId,
-		mandatorySignIn: true,
-		oauth: {
-			domain: cognitoDomain,
-			scope: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
-			redirectSignIn: process.env.REACT_APP_REDIRECT_SIGN_IN,
-			redirectSignOut: process.env.REACT_APP_REDIRECT_SIGN_OUT,
-			responseType: process.env.REACT_APP_OAUTH_RESPONSE_TYPE || "token"
-		}
-	}
+  Auth: {
+    Cognito: {
+      region: regionId,
+      userPoolId: userPoolId,
+      userPoolClientId: clientId, // Changed from userPoolWebClientId
+      loginWith: {
+        oauth: {
+          domain: cognitoDomain,
+          scopes: ["email", "profile", "openid", "aws.cognito.signin.user.admin"],
+          redirectSignIn: [process.env.REACT_APP_REDIRECT_SIGN_IN],
+          redirectSignOut: [process.env.REACT_APP_REDIRECT_SIGN_OUT], 
+          responseType: process.env.REACT_APP_OAUTH_RESPONSE_TYPE || "code", 
+        }
+      }
+    }
+  }
 });
 
-class App extends Component {
+class AppContent extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -41,12 +45,13 @@ class App extends Component {
     }
 	componentDidMount() {
 
-		Auth.currentSession()
+		fetchAuthSession()
 			.then((res) => {
-			    console.log("currentSession", res)
-				const jwtToken = res.getIdToken().getJwtToken();
+			    console.log("fetchAuthSession", res)
+				// const jwtToken = res.getIdToken().getJwtToken();
+        const jwtToken = res.tokens?.idToken?.toString()
 				this.setState({
-				    usernameClaims: res.getIdToken()['payload']['cognito:username']
+				    usernameClaims: res.tokens?.idToken?.payload?.['cognito:username']
 				});
 				fetch(apiGateway + '/demo', {
 						headers: {
@@ -65,13 +70,14 @@ class App extends Component {
 			});
 	}
 	render() {
-		return ( <div className = "App" >
+		return (
+        <div className = "App" >
                     <header className = "App-header" >
                         <img src = {logo}
                         className = "App-logo"
                         alt = "logo" / >
                         <p >
-                            Edit < code > src / App.js < /code> and save to reload.
+                            Edit <code> src / App.js </code> and save to reload.
                         </p>
                          <div>
                             {cognitoDomain}
@@ -86,11 +92,17 @@ class App extends Component {
                               {this.state.usernameClaims} = {this.state.usernameClaimsAuthorizer}
                          </div>
                     </header>
-			</div>
+			  </div>
 		);
 	}
 }
 
+function App() {
+  return (
+    <Authenticator>
+      <AppContent />
+    </Authenticator>
+  );
+}
 
-export default withAuthenticator(App);
-
+export default App;

@@ -16,7 +16,9 @@ This CDK app deploys the existing `authorizerFunc` and `hello` Lambda functions 
 2. Bootstrap the environment if needed:
 
    ```bash
-   cdk bootstrap
+   export USER_POOL_ID=eu-west-1_XXXXXXXX
+   export USER_POOL_CLIENT_ID=CLIENT_ID_1,CLIENT_ID_2
+   cdk bootstrap -c stackType=both
    ```
 
 ## Deploy 
@@ -35,7 +37,7 @@ cdk deploy -c stackType=cognito
 Provide the Cognito values as CDK context:
 
 ```bash
-cdk deploy -c userPoolId=eu-west-1_XXXXXXXX -c userPoolClientId=CLIENT_ID_1,CLIENT_ID_2
+cdk deploy -c stackType=authorizer -c userPoolId=eu-west-1_XXXXXXXX -c userPoolClientId=CLIENT_ID_1,CLIENT_ID_2
 ```
 
 Alternatively, use environment variables:
