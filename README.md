@@ -84,8 +84,8 @@ For the deployment of the demo I use the AWS CDK.
 #### Requiem
 
 * [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
-* Cognito User pool
-* UserPoolClient
+* Cognito User pool you can get it form the cdk Cognito stack
+* UserPoolClient you can get it form the cdk Cognito stack
 
 #### Deploy Stack
 

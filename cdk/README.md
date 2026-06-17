@@ -54,6 +54,17 @@ I can deploy both stacks using the following command:
 cdk deploy -c stackType=both
 ```
 
+### Destroy
+
+Drop both stacks, or it's one individual.
+
+```shell script
+export USER_POOL_ID=eu-west-1_XXXXXXXX
+export USER_POOL_CLIENT_ID=CLIENT_ID_1,CLIENT_ID_2
+cdk destroy -c stackType=both
+```%         
+
+
 ## Notes
 
 - The API path is `/demo`.
