@@ -25,7 +25,7 @@ This CDK app deploys the existing `authorizerFunc` and `hello` Lambda functions 
 
 To avoid creating and destroying every time the Cognito stack (since it has to do only with the users), we deploy it in a separate stack. Say, if we want to destroy it, we destroy only one of them, or we can destroy both of them. 
 
-```
+```bash
 cd cdk
 cdk deploy -c stackType=cognito
 ```
@@ -58,12 +58,11 @@ cdk deploy -c stackType=both
 
 Drop both stacks, or it's one individual.
 
-```shell script
+```bash
 export USER_POOL_ID=eu-west-1_XXXXXXXX
 export USER_POOL_CLIENT_ID=CLIENT_ID_1,CLIENT_ID_2
 cdk destroy -c stackType=both
-```%         
-
+``` 
 
 ## Notes
 

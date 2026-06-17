@@ -91,4 +91,4 @@ For the deployment of the demo I use the AWS CDK.
 
 We need to provide the `{clientID}` and the `{userpoolID}` from our Cognito User pool
 
-Use the `./cdk/README.md` file that you'll find on the cdk folder. 
+Use the cdk/README.md file that you'll find on the cdk folder. 
