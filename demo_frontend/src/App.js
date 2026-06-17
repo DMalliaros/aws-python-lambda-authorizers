@@ -1,7 +1,8 @@
 import React, {	Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Amplify, { Auth } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
+import { Auth } from '@aws-amplify/auth';
 import { withAuthenticator } from 'aws-amplify-react';
 
 const apiId = process.env.REACT_APP_API_ID;
@@ -11,7 +12,7 @@ const clientId = process.env.REACT_APP_COGNITO_USER_POOL_CLIENT_ID;
 const userPoolId = process.env.REACT_APP_COGNITO_USER_POOL_ID;
 const cognitoDomainPref = process.env.REACT_APP_COGNITO_DOMAIN_PREFIX;
 const cognitoDomain = `${cognitoDomainPref}.auth.${regionId}.amazoncognito.com`;
-const apiGateway = `https://${apiId}.execute-api.${regionId}.amazonaws.com/${stage}`;
+const apiGateway = `https://${apiId}.execute-api.${regionId}.amazonaws.com`;
 
 Amplify.configure({
 	Auth: {
